@@ -9,12 +9,12 @@
             android:icon="@mipmap/ic_launcher"
             android:title="Start" />
         <item
-            android:id="@+id/nav_list2_fragment"
+            android:id="@+id/nav_photo_list_fragment"
             android:icon="@mipmap/ic_launcher"
 
             android:title="menu list2 Fragment" />
         <item
-            android:id="@+id/nav_view_pager_fragment"
+            android:id="@+id/nav_take_photo_fragment"
             android:icon="@mipmap/ic_launcher"
             android:title="Menu Viewpager" />
     </group>

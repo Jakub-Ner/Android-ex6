@@ -59,13 +59,12 @@ class StartFragment : Fragment() {
         binding.tv3path.text = dir3.absolutePath
         binding.tv4path.text = dir4?.absolutePath ?: "nothing"
         dir4?.let {
-//            val theuri = FileProvider.getUriForFile(
-//                requireContext(),
-//                "${BuildConfig.APPLICATION_ID}.provider",
-//                it
-//            )
-            binding.tv5path.text =  "${BuildConfig.APPLICATION_ID}.provider"
-//            binding.tv5path.text = "${theuri.scheme}:/${theuri.path}"
+            val theuri = FileProvider.getUriForFile(
+                requireContext(),
+                "${BuildConfig.APPLICATION_ID}.provider",
+                it
+            )
+            binding.tv5path.text = "${theuri.scheme}:/${theuri.path}"
         }
     }
 

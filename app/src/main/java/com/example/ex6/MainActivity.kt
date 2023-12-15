@@ -49,6 +49,8 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_start,
+                R.id.nav_photo_list_fragment,
+                R.id.nav_take_photo_fragment,
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
