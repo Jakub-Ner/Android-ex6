@@ -1,12 +1,16 @@
 package com.example.ex6
 
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.example.ex6.databinding.FragmentStartBinding
-
+import java.io.File
+import com.example.ex6.BuildConfig
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
@@ -34,9 +38,35 @@ class StartFragment : Fragment() {
         val root: View = binding.root
         return root
     }
+
+    private var basePhotoUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val internalDir: File = requireContext().filesDir
+
+        val externalDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+        val dir2 = Environment.getExternalStorageDirectory()
+        val dir3 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        val dir4 = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+        binding.tv1path.text =
+            "${basePhotoUri.scheme}:/${MediaStore.Images.Media.EXTERNAL_CONTENT_URI.path}"
+
+        binding.tv2path.text = dir2.absolutePath
+        binding.tv3path.text = dir3.absolutePath
+        binding.tv4path.text = dir4?.absolutePath ?: "nothing"
+        dir4?.let {
+//            val theuri = FileProvider.getUriForFile(
+//                requireContext(),
+//                "${BuildConfig.APPLICATION_ID}.provider",
+//                it
+//            )
+            binding.tv5path.text =  "${BuildConfig.APPLICATION_ID}.provider"
+//            binding.tv5path.text = "${theuri.scheme}:/${theuri.path}"
+        }
     }
 
     companion object {
