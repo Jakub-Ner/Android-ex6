@@ -21,5 +21,7 @@
         android:layout_gravity="start"
         android:maxWidth="150dp"
         android:fitsSystemWindows="true"
-        app:menu="@menu/navbar_drawer_main" />
+        app:menu="@menu/navbar_drawer_main"
+        android:background="@color/blue_700"
+        />
 </androidx.drawerlayout.widget.DrawerLayout>
