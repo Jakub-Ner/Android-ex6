@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view"
+    >
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_start"
+            android:icon="@mipmap/ic_launcher"
+            android:title="Start" />
+        <item
+            android:id="@+id/nav_list2_fragment"
+            android:icon="@mipmap/ic_launcher"
+
+            android:title="menu list2 Fragment" />
+        <item
+            android:id="@+id/nav_view_pager_fragment"
+            android:icon="@mipmap/ic_launcher"
+            android:title="Menu Viewpager" />
+    </group>
+</menu>
