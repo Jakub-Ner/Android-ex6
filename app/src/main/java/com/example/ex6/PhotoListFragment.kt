@@ -1,10 +1,11 @@
 package com.example.ex6
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.example.ex6.databinding.FragmentPhotoListBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -29,6 +30,23 @@ class PhotoListFragment : Fragment() {
         _binding =
             FragmentPhotoListBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val recView = _binding!!.recView
+
+        val dataRepo = DataRepo.getinstance(requireContext())
+        val adapter = dataRepo.getSharedList()
+            ?.let { PhotoListAdapter(requireContext(), it) }
+        if (adapter == null) {
+            Toast.makeText(
+                requireContext(), "Invalid Data",
+                Toast.LENGTH_LONG
+            )
+                .show()
+            requireActivity().onBackPressed()
+        }
+        recView.adapter = adapter
     }
 
     companion object {
