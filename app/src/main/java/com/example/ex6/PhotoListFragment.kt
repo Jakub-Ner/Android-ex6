@@ -6,6 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.ex6.databinding.FragmentPhotoListBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -42,10 +45,11 @@ class PhotoListFragment : Fragment() {
             Toast.makeText(
                 requireContext(), "Invalid Data",
                 Toast.LENGTH_LONG
-            )
-                .show()
+            ).show()
             requireActivity().onBackPressed()
         }
+//        recView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        recView.layoutManager = GridLayoutManager(requireContext(), 2)
         recView.adapter = adapter
     }
 

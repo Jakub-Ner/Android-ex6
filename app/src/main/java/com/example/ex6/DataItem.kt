@@ -14,5 +14,21 @@ class DataItem {
         this.path = path
         this.curi = curi
     }
+
     constructor()
+
+    val SHARED_S = 1
+    val PRIVATE_S = 2
+    var photo_storage = SHARED_S
+    fun setStorage(storage: Int): Boolean {
+        if (storage != SHARED_S && storage != PRIVATE_S)
+            return false else {
+            photo_storage = storage
+        }
+        return true
+    }
+
+    fun getStorage(): Int {
+        return photo_storage
+    }
 }

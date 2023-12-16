@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -18,15 +19,17 @@ class PhotoListAdapter(val appContext: Context, val dList: MutableList<DataItem>
     RecyclerView.Adapter<PhotoListAdapter.MyViewHolder>() {
     inner class MyViewHolder(viewBinding: ListRowBinding) :
         RecyclerView.ViewHolder(viewBinding.root) {
-        val tv1 = viewBinding.tv1
-        val tv2 = viewBinding.tv2
-        val tv3 = viewBinding.tv3
+//        val tv1 = viewBinding.tv1
+//        val tv2 = viewBinding.tv2
+//        val tv3 = viewBinding.tv3
         val img = viewBinding.img
-
+    }
+    init {
+        Log.d("myTag", "PhotoListAdapter: ${dList.size}")
     }
 
     companion object {
-        const val PAGE_COUNT = 2
+        const val PAGE_COUNT = 10
     }
 
     override fun onCreateViewHolder(
@@ -41,16 +44,16 @@ class PhotoListAdapter(val appContext: Context, val dList: MutableList<DataItem>
     }
 
     override fun onBindViewHolder(vHolder: PhotoListAdapter.MyViewHolder, position: Int) {
-        vHolder.tv1.text = dList[position].name
-        vHolder.tv2.text =
-            dList[position].uripath
-        vHolder.tv3.text = dList[position].curi?.path //temporary this data
+//        vHolder.tv1.text = dList[position].name
+//        vHolder.tv2.text =
+//            dList[position].uripath
+//        vHolder.tv3.text = dList[position].curi?.path //temporary this data
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
             dList[position].curi?.let {
                 vHolder.img.setImageBitmap(
                     appContext.contentResolver.loadThumbnail(
                         it,
-                        Size(72, 72),
+                        Size(150, 150),
                         null
                     )
                 )
