@@ -12,10 +12,10 @@
             android:id="@+id/nav_photo_list_fragment"
             android:icon="@mipmap/ic_launcher"
 
-            android:title="menu list2 Fragment" />
+            android:title="Photos list" />
         <item
             android:id="@+id/nav_take_photo_fragment"
             android:icon="@mipmap/ic_launcher"
-            android:title="Menu Viewpager" />
+            android:title="Take a photo" />
     </group>
 </menu>
