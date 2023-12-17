@@ -48,8 +48,8 @@ class PhotoListFragment : Fragment() {
         val recView = _binding!!.recView
 
         val dataRepo = DataRepo.getinstance(requireContext())
-        dataRepo.setStorage(SHARED_S) // replace with PRIVATE_S to access app-only imgs
-        val adapter = dataRepo.getSharedList() // replace with getAppLiist to access app-only imgs
+        dataRepo.setStorage(PRIVATE_S) // replace with PRIVATE_S to access app-only imgs
+        val adapter = dataRepo.getAppList() // replace with getAppLiist to access app-only imgs
             ?.let { PhotoListAdapter(requireContext(), it) }
         if (adapter == null) {
             Toast.makeText(

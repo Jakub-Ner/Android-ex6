@@ -29,7 +29,7 @@ class PhotoListAdapter(val appContext: Context, val dList: MutableList<DataItem>
     }
 
     companion object {
-        const val PAGE_COUNT = 10
+        const val PAGE_COUNT = 1
     }
 
     override fun onCreateViewHolder(

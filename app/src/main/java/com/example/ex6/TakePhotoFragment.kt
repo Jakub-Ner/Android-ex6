@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -88,21 +89,25 @@ class TakePhotoFragment : Fragment() {
     }
 
     private fun getNewFileUri(): Uri {
+        val dir: File
+        when (DataRepo.getStorage()) {
+            DataRepo.SHARED_S -> dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+            DataRepo.PRIVATE_S -> dir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+            else -> return MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        }
+
         val tStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) // requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         val tmpFile = File.createTempFile(
             "Photo_" + "${tStamp}",
             ".jpg",
             dir
         )
-        lastFile = tmpFile //save File for future use
         return FileProvider.getUriForFile(
             requireContext(),
             "${BuildConfig.APPLICATION_ID}.provider",
             tmpFile
         )
     }
-
     companion object {
         /**
          * Use this factory method to create a new instance of
