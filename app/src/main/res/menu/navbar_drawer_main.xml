@@ -6,16 +6,12 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_start"
-            android:icon="@mipmap/ic_launcher"
             android:title="Start" />
         <item
             android:id="@+id/nav_photo_list_fragment"
-            android:icon="@mipmap/ic_launcher"
-
             android:title="Photos list" />
         <item
             android:id="@+id/nav_take_photo_fragment"
-            android:icon="@mipmap/ic_launcher"
             android:title="Take a photo" />
     </group>
 </menu>

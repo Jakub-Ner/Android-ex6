@@ -1,15 +1,24 @@
 package com.example.ex6
 
+import android.content.ActivityNotFoundException
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
+import com.example.ex6.DataRepo.Companion.PRIVATE_S
+import com.example.ex6.DataRepo.Companion.SHARED_S
 import com.example.ex6.databinding.FragmentPhotoListBinding
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,7 +48,8 @@ class PhotoListFragment : Fragment() {
         val recView = _binding!!.recView
 
         val dataRepo = DataRepo.getinstance(requireContext())
-        val adapter = dataRepo.getSharedList()
+        dataRepo.setStorage(SHARED_S) // replace with PRIVATE_S to access app-only imgs
+        val adapter = dataRepo.getSharedList() // replace with getAppLiist to access app-only imgs
             ?.let { PhotoListAdapter(requireContext(), it) }
         if (adapter == null) {
             Toast.makeText(
@@ -51,6 +61,46 @@ class PhotoListFragment : Fragment() {
 //        recView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         recView.layoutManager = GridLayoutManager(requireContext(), 2)
         recView.adapter = adapter
+
+        val photoLauncher =
+            registerForActivityResult(ActivityResultContracts.TakePicture()) { result: Boolean ->
+                if (result) { // consume result - see later remarks
+                    Toast.makeText(requireContext(), "Photo TAKEN", Toast.LENGTH_LONG).show()
+                } else { // make some action – warning
+                    Toast.makeText(requireContext(), "Photo NOT taken!", Toast.LENGTH_LONG).show()
+                }
+            }
+        binding.btnAdd.setOnClickListener {
+            try {
+                photoLauncher.launch(getNewFileUri())
+//                PhotoListAdapter.PAGE_COUNT++
+//                PhotoListAdapter(requireContext(), dataRepo.getAppList()!!).notifyDataSetChanged()
+            } catch (e: ActivityNotFoundException) {
+                Toast.makeText(requireContext(), "CAMERA DOESN'T WORK!", Toast.LENGTH_LONG).show()
+            }
+
+        }
+    }
+
+    private fun getNewFileUri(): Uri {
+        val dir: File
+        when (DataRepo.getStorage()) {
+            SHARED_S -> dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+            PRIVATE_S -> dir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+            else -> return MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        }
+
+        val tStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val tmpFile = File.createTempFile(
+            "Photo_" + "${tStamp}",
+            ".jpg",
+            dir
+        )
+        return FileProvider.getUriForFile(
+            requireContext(),
+            "${BuildConfig.APPLICATION_ID}.provider",
+            tmpFile
+        )
     }
 
     companion object {

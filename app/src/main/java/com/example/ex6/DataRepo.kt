@@ -77,12 +77,24 @@ class DataRepo {
                 }
             }
         }
+        val size = appStoreList?.size
+        Log.d("myTag", "getAppList: $size")
         return appStoreList
+    }
+
+
+    fun setStorage(storage: Int): Boolean {
+        if (storage != SHARED_S && storage != PRIVATE_S)
+            return false
+        photo_storage = storage
+        return true
     }
 
     companion object {
         private var INSTANCE: DataRepo? = null
         private lateinit var ctx: Context
+        val SHARED_S = 1
+        val PRIVATE_S = 2
         var sharedStoreList: MutableList<DataItem>? = null
         var appStoreList: MutableList<DataItem>? = null
 
@@ -94,6 +106,12 @@ class DataRepo {
                 this.ctx = ctx
             }
             return INSTANCE as DataRepo
+        }
+
+        var photo_storage = SHARED_S
+
+        fun getStorage(): Int {
+            return photo_storage
         }
     }
 }
