@@ -29,7 +29,7 @@ class PhotoListAdapter(val appContext: Context, val dList: MutableList<DataItem>
     }
 
     companion object {
-        const val PAGE_COUNT = 10
+        const val MAX_PAGE_COUNT = 100
     }
 
     override fun onCreateViewHolder(
@@ -81,7 +81,7 @@ class PhotoListAdapter(val appContext: Context, val dList: MutableList<DataItem>
     }
 
     override fun getItemCount(): Int {
-        return PAGE_COUNT
+        return Math.min(MAX_PAGE_COUNT, dList.size)
     }
 
 

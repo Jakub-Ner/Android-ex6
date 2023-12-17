@@ -27,11 +27,10 @@ class MainActivity : AppCompatActivity() {
 
     private val REQUIRED_PERMISSIONS = mutableListOf(
         Manifest.permission.CAMERA,
-        Manifest.permission.READ_EXTERNAL_STORAGE // if new android it may not work
+        Manifest.permission.READ_EXTERNAL_STORAGE // for newer android it may not work, just remove it and use PRIVATE_S for DataRepo
     ).apply {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//            add(Manifest.permission.READ_EXTERNAL_STORAGE) // not sure if should be here
         }
     }.toTypedArray()
 
