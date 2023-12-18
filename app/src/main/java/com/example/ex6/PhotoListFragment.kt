@@ -12,7 +12,9 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.ex6.DataRepo.Companion.PRIVATE_S
 import com.example.ex6.DataRepo.Companion.SHARED_S
 import com.example.ex6.databinding.FragmentPhotoListBinding
@@ -34,6 +36,9 @@ class PhotoListFragment : Fragment() {
     private var _binding: FragmentPhotoListBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var dataRepo: DataRepo
+    private lateinit var adapter: PhotoListAdapter
+    private lateinit var recView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,16 +46,26 @@ class PhotoListFragment : Fragment() {
     ): View? {
         _binding =
             FragmentPhotoListBinding.inflate(inflater, container, false)
+        dataRepo = DataRepo.getinstance(requireContext())
+        dataRepo.setStorage(PRIVATE_S) // replace with PRIVATE_S to access app-only imgs
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val recView = _binding!!.recView
+        recView = _binding!!.recView
 
-        val dataRepo = DataRepo.getinstance(requireContext())
-        dataRepo.setStorage(PRIVATE_S) // replace with PRIVATE_S to access app-only imgs
+        val listener = object : OnItemClickListener {
+            override fun onImageClick(dataItem: DataItem) {
+                val bundle = Bundle()
+//                    bundle.putInt("startingIndex", position)
+                findNavController().navigate(R.id.swipePhotoFragment, bundle)
+            }
+        }
+
+
         val adapter = dataRepo.getAppList() // replace with getAppLiist to access app-only imgs
-            ?.let { PhotoListAdapter(requireContext(), it) }
+            ?.let { PhotoListAdapter(requireContext(), it, listener) }
         if (adapter == null) {
             Toast.makeText(
                 requireContext(), "Invalid Data",
@@ -60,6 +75,7 @@ class PhotoListFragment : Fragment() {
         }
 //        recView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         recView.layoutManager = GridLayoutManager(requireContext(), 2)
+        this.adapter = adapter!!
         recView.adapter = adapter
 
         val photoLauncher =
@@ -70,22 +86,38 @@ class PhotoListFragment : Fragment() {
                     Toast.makeText(requireContext(), "Photo NOT taken!", Toast.LENGTH_LONG).show()
                 }
             }
+
         binding.btnAdd.setOnClickListener {
             try {
-                photoLauncher.launch(getNewFileUri())
-                PhotoListAdapter(requireContext(), dataRepo.getAppList()!!).notifyDataSetChanged()
+                val tmpUri = getNewFileUri()
+                val value = File(tmpUri.path!!)
+                val fileName = value.name
+                photoLauncher.launch(tmpUri)
+                val newImage = DataItem(
+                    fileName,
+                    value.toURI().path,
+                    value.absolutePath,
+                    tmpUri
+                )
+                adapter.dList.add(newImage)
+                adapter.notifyDataSetChanged()
+//                dataRepo.getAppList()?.add(newImage) // add should be implemented
+
             } catch (e: ActivityNotFoundException) {
                 Toast.makeText(requireContext(), "CAMERA DOESN'T WORK!", Toast.LENGTH_LONG).show()
             }
-
         }
     }
 
     private fun getNewFileUri(): Uri {
         val dir: File
         when (DataRepo.getStorage()) {
-            SHARED_S -> dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-            PRIVATE_S -> dir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+            SHARED_S -> dir =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+
+            PRIVATE_S -> dir =
+                requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+
             else -> return MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         }
 

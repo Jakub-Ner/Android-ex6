@@ -17,11 +17,20 @@
         android:id="@+id/nav_photo_list_fragment"
         android:name="com.example.ex6.PhotoListFragment"
         android:label="fragment_photo_list"
-        tools:layout="@layout/fragment_photo_list" />
+        tools:layout="@layout/fragment_photo_list" >
+        <action
+            android:id="@+id/action_nav_photo_list_fragment_to_swipePhotoFragment"
+            app:destination="@id/swipePhotoFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_take_photo_fragment"
         android:name="com.example.ex6.TakePhotoFragment"
         android:label="fragment_take_photo"
         tools:layout="@layout/fragment_take_photo" />
+    <fragment
+        android:id="@+id/swipePhotoFragment"
+        android:name="com.example.ex6.SwipePhotoFragment"
+        android:label="fragment_swipe_photo"
+        tools:layout="@layout/fragment_swipe_photo" />
 </navigation>

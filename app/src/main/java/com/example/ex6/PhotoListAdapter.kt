@@ -14,12 +14,18 @@ import com.example.ex6.databinding.ListRowBinding
 import java.io.FileNotFoundException
 import java.io.InputStream
 
+interface OnItemClickListener {
+    fun onImageClick(DataItem: DataItem)
+}
 
-class PhotoListAdapter(val appContext: Context, val dList: MutableList<DataItem>) :
+class PhotoListAdapter(
+    val appContext: Context, val dList: MutableList<DataItem>,
+    private val listener: OnItemClickListener
+) :
     RecyclerView.Adapter<PhotoListAdapter.MyViewHolder>() {
     inner class MyViewHolder(viewBinding: ListRowBinding) :
         RecyclerView.ViewHolder(viewBinding.root) {
-//        val tv1 = viewBinding.tv1
+        //        val tv1 = viewBinding.tv1
 //        val tv2 = viewBinding.tv2
 //        val tv3 = viewBinding.tv3
         val img = viewBinding.img
@@ -60,6 +66,10 @@ class PhotoListAdapter(val appContext: Context, val dList: MutableList<DataItem>
             }
         } else
             vHolder.img.setImageBitmap(getBitmapFromUri(appContext, dList[position].curi))
+
+        vHolder.img.setOnClickListener {
+            listener.onImageClick(dList[position])
+        }
     }
 
     fun getBitmapFromUri(mContext: Context, uri: Uri?): Bitmap? {
